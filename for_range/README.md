@@ -1,6 +1,6 @@
 ### Goで範囲節によるfor
 
-#### [Goで範囲節によるforを文字列に対して使った時、vに入るのはrune型]()
+#### [Goで範囲節によるforを文字列に対して使った時、vに入るのはrune型](https://github.com/DaisukeKarasawa/go/blob/master/for_range/range.go)
 
 文字列に対して範囲節のforを使用して、１文字ずつswitchやifで分岐処理を行った時
 
@@ -21,10 +21,10 @@ for _, v := range str {
 ```
 
 **問題**
-```
-<b>cannot convert "文字" (untyped string constant) to type rune</b>
-<b>invalid operation: v == "s" (mismatched types rune and untyped string)</b>
-```
+
+*cannot convert "文字" (untyped string constant) to type rune*
+
+*invalid operation: v == "s" (mismatched types rune and untyped string)*
 
 「文字列をrune型に変換できない」「型の不一致」と出ているので、string()でvをキャストする。
 ```
