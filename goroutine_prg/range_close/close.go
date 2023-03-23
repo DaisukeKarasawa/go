@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// firstチャネルに 1~9 の値を送信
 func producer(first chan int) {
 	defer close(first)
 	for i := 0; i < 10; i++ {
@@ -9,6 +10,7 @@ func producer(first chan int) {
 	}
 }
 
+// firstチャネルから受信した値を * 2 してsecondチャネルに送信
 func multi2(first <-chan int, second chan<- int) {
 	defer close(second)
 	for i := range first {
@@ -16,6 +18,7 @@ func multi2(first <-chan int, second chan<- int) {
 	}
 }
 
+// secondチャネルから受信した値を * 4 してthirdチャネルに送信
 func multi4(second, third chan int) {
 	// main関数内のforに対して、チャネルの送信の終了を知らせる
 	defer close(third)
@@ -35,6 +38,7 @@ func main() {
 
 	// third のチャネルが送信終了するまで受信し続ける
 	for result := range third {
+		// thirdチャネルから受信した値を出力する
 		fmt.Println(result)
 	}
 }

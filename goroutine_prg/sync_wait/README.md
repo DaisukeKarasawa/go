@@ -1,8 +1,8 @@
-### sync.WaitGroupを使用して並列処理の処理の終了を待つ
+## sync.WaitGroupを使用して並列処理の処理の終了を待つ
 
-#### sync.WaitGroup
+### sync.WaitGroup
 
-動いているゴルーチンの処理の終了を待ってから、全体の処理を終了させることが出来る。
+動いているゴルーチンの処理の終了を待ってから、次の処理へ移行することが出来る。
 ```
 func goroutine(wg *sync.WaitGroup) {
   ...処理
@@ -16,6 +16,7 @@ func nomal() {
 func main() {
   var wg sync.WaitGroup // 宣言
   wg.Add(1)             // １つの並列処理があることを伝える
+
   go goroutine(&wg)     // ゴルーチンには、宣言したアドレスを渡す
   nomal()
   wg.Wait()             // .Done()が宣言されるまで待機する
@@ -24,12 +25,21 @@ func main() {
 
 **プロセス**
 
-*１： var wg sync.WaitGroup で宣言*
-*２： wg.Add(1) で並列処理を１つ追加する*
-*３： wg.Wait で追加された並列処理１つが終了されるのを待つ*
-*４： wg.Done で終了を知らせる*
+*１： var wg sync.WaitGroup で宣言する。*
 
-#### .Wait()を置く場所
+*２： wg.Add(1) で並列処理を１つ追加する。*
+
+*３： wg.Wait() で追加された並列処理１つが終了されるのを待つ。*
+
+*４： wg.Done() で終了を知らせる。*
+
+### .Wait()を置く場所
+
+**例）**
+
+*通常処理として、nomal関数で "hello" を５回出力させる。*
+
+*goroutine関数で "world" を５回出力させるプログラムを並列で動かす。*
 
 ```
 func goroutine(s string, wg *sync.WaitGroup) {
@@ -54,11 +64,8 @@ func main() {
 	wg.Wait()
 }
 ```
-*通常処理として、nomal関数を使って "hello" と出力させる。*
 
-*goroutine関数を使って "world" と出力させるプログラムを並列で動かす。*
-
-この時に、main関数内の.Wait()の置く位置を変更して処理結果の変化を確認してみた。
+この時に、main関数内の.Wait()の置く位置を変更して処理結果の変化を確認する。
 
 **pattern1：.Add()の前**
 ```
@@ -74,7 +81,7 @@ wg.Add(1)
 wg.Wait()   // fatal error: all goroutines are asleep - deadlock!
 go goroutine("world", &wg) 
 ```
-結果：ゴルーチンを走らせる前に.Wait()しているので、永遠に.Done()を待ち続けてエラーが発生した。
+結果：ゴルーチンを走らせる前に.Wait()しているので、永遠に.Done()を待ち続けてエラーが発生する。
 
 **pattern3：go で並列処理を走らせた直後**
 ```
@@ -92,7 +99,7 @@ go goroutine("world", &wg)
 nomal("hello")
 wg.Wait()
 ```
-結果：nomalの処理結果が出てから、goroutineの処理結果が出た。
+結果：nomalの処理結果が出てから、goroutineの処理結果が出る。
 
 
 ##### 余談

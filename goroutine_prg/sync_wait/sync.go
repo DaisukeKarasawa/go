@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+// firstチャネルに 1~9 の値を送信
 func producer(first chan int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := 0; i < 10; i++ {
@@ -13,6 +14,7 @@ func producer(first chan int, wg *sync.WaitGroup) {
 	close(first)
 }
 
+// firstチャネルから受信した値を * 2 してsecondチャネルに送信
 func multi2(first <-chan int, second chan<- int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := range first {
@@ -21,6 +23,7 @@ func multi2(first <-chan int, second chan<- int, wg *sync.WaitGroup) {
 	close(second)
 }
 
+// secondチャネルから受信した値を * 4 してthirdチャネルに送信
 func multi4(second, third chan int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := range second {
@@ -29,6 +32,7 @@ func multi4(second, third chan int, wg *sync.WaitGroup) {
 	close(third)
 }
 
+// thirdチャネルから受信した値を出力する
 func outputResult(third chan int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for result := range third {
@@ -41,7 +45,7 @@ func main() {
 	first := make(chan int)
 	second := make(chan int)
 	third := make(chan int)
-	
+
 	// 並列処理が４つ動いていることを知らせる
 	wg.Add(4)
 
