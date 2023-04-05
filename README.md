@@ -6,6 +6,6 @@ Goで範囲節によるforを、文字列に使用した際に気づいたこと
 
 sync.WaitGroupとclose()の使い方に関する、自分なりの解釈
 
-### [okイディオム]()
+### [okイディオム](https://github.com/DaisukeKarasawa/go/tree/master/comma_ok)
 
 _, ok などで利用される ok の値の使い方
